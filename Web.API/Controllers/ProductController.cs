@@ -30,5 +30,12 @@ namespace Web.API.Controllers
             var item = await _repo.Get<Product>(id);
             return item;
         }
+
+        [HttpPut]
+        public async Task<Product> Update(int id, Product entity)
+        {
+            var updatedItem = await _repo.Update<Product>(entity, id);
+            return updatedItem;
+        }
     }
 }

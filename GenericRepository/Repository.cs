@@ -31,5 +31,22 @@ namespace GenericRepository
 
             return entity;
         }
+
+        public async Task<T> Update<T>(T entity, int id) where T : class
+        {
+            DbSet<T> dbSet = _context.Set<T>();
+            T existingItem = await dbSet.FindAsync(id);
+
+            if (existingItem == null)
+            {
+                throw new System.Exception("Item not found.");
+            }
+
+            _context.Entry(existingItem).CurrentValues.SetValues(entity);
+
+            await _context.SaveChangesAsync();
+
+            return existingItem;
+        }
     }
 }

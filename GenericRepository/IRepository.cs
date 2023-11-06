@@ -11,5 +11,6 @@ namespace GenericRepository
     {
         Task<T?> Get<T>(int id) where T : class;
         Task<T> Create<T>(T entity) where T : class;
+        Task<T> Update<T>(T entity, int id) where T : class;
     }
 }
