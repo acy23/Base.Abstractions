@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Dynamic;
+using System.Linq.Expressions;
 
 namespace GenericRepository
 {
@@ -47,6 +49,27 @@ namespace GenericRepository
             await _context.SaveChangesAsync();
 
             return existingItem;
+        }
+
+        public async Task<List<T>> GetList<T>() where T : class
+        {
+            DbSet<T> dbSet = _context.Set<T>();
+
+            List<T> entityList = await dbSet
+                .ToListAsync();
+
+            return entityList;
+        }
+
+        public async Task<List<T>> GetListByExpression<T>(Expression<Func<T,bool>> predicate) where T : class
+        {
+            DbSet<T> dbSet = _context.Set<T>();
+
+            List<T> entityList = await dbSet
+                .Where(predicate)
+                .ToListAsync();
+
+            return entityList;
         }
     }
 }

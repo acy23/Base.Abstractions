@@ -37,5 +37,19 @@ namespace Web.API.Controllers
             var updatedItem = await _repo.Update<Product>(entity, id);
             return updatedItem;
         }
+
+        [HttpGet("get-list")]
+        public async Task<List<Product>> GetListById()
+        {
+            var entities = await _repo.GetList<Product>();
+            return entities;
+        }
+
+        [HttpGet("get-list-by-expression")]
+        public async Task<List<Product>> GetListByExpression()
+        {
+            var entities = await _repo.GetListByExpression<Product>(x=>x.Id == 1);
+            return entities;
+        }
     }
 }
