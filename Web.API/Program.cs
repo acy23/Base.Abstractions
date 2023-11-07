@@ -1,3 +1,4 @@
+using Cache;
 using GenericRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var appDbContext = new AppDbContext(options: new DbContextOptions<AppDbContext>());
 builder.Services.AddGenericRepository();
+builder.Services.AddCache();
 
 var app = builder.Build();
 

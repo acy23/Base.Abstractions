@@ -1,7 +1,9 @@
-﻿using GenericRepository;
+﻿using Cache;
+using GenericRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Web.API.Controllers
 {
@@ -11,24 +13,38 @@ namespace Web.API.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IRepository _repo;
+        private readonly ICacheService _cache;
 
-        public ProductController(AppDbContext context)
+        public ProductController(AppDbContext context, ICacheService cache)
         {
             _context = context;
-            _repo = new Repository(_context);   
+            _repo = new Repository(_context);
+            _cache = cache;
         }
 
         [HttpPost]
         public async Task Create([FromBody] Product product)
         {
             await _repo.Create(product);
+
+            _cache.Set<Product>(product.Id.ToString(), product);
         }
 
         [HttpGet]
-        public async Task<Product> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var item = await _repo.Get<Product>(id);
-            return item;
+            //// FROM DB
+            //var item = await _repo.Get<Product>(id);
+            //return item;
+
+            // FROM CACHE
+            var item = _cache.Get<Product>(id.ToString());
+            if(item != null)
+            {
+                return Ok(item);
+            }
+
+            return NotFound();
         }
 
         [HttpPut]
