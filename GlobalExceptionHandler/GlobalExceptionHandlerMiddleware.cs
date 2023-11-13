@@ -1,0 +1,100 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.Net;
+using System.Text.Json;
+using GlobalExceptionHandler.Exceptions;
+
+
+using KeyNotFoundException = GlobalExceptionHandler.Exceptions.KeyNotFoundException;
+using BadRequestException = GlobalExceptionHandler.Exceptions.BadRequestException;
+using NotFoundException = GlobalExceptionHandler.Exceptions.NotFoundException;
+using UnauthorizedAccessException = GlobalExceptionHandler.Exceptions.UnauthorizedAccessException;
+using NotImplementedException = GlobalExceptionHandler.Exceptions.NotImplementedException;
+
+namespace GlobalExceptionHandler
+{
+    public class GlobalExceptionHandlerMiddleware
+    {
+        private readonly RequestDelegate _next;
+
+        public GlobalExceptionHandlerMiddleware(RequestDelegate next)
+        {
+            _next = next;
+        }
+
+        public async Task Invoke(HttpContext context)
+        {
+            try
+            {
+                await _next(context);
+            }
+            catch (Exception ex)
+            {
+                await HandleExceptionAsync(context, ex);
+            }
+        }
+
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        {
+            HttpStatusCode status;
+            var stackTrace = string.Empty;
+            string message;
+
+            var exceptionType = exception.GetType();
+
+            if (exceptionType == typeof(BadRequestException))
+            {
+                message = exception.Message;
+                status = HttpStatusCode.BadRequest;
+                //stackTrace = exception.StackTrace;
+                stackTrace = string.Empty;
+            }
+            else if (exceptionType == typeof(NotFoundException))
+            {
+                message = exception.Message;
+                status = HttpStatusCode.NotFound;
+                //stackTrace = exception.StackTrace;
+                stackTrace = string.Empty;
+            }
+            else if (exceptionType == typeof(NotImplementedException))
+            {
+                status = HttpStatusCode.NotImplemented;
+                message = exception.Message;
+                //stackTrace = exception.StackTrace;
+                stackTrace = string.Empty;
+            }
+            else if (exceptionType == typeof(UnauthorizedAccessException))
+            {
+                status = HttpStatusCode.Unauthorized;
+                message = exception.Message;
+                //stackTrace = exception.StackTrace;
+                stackTrace = string.Empty;
+            }
+            else if (exceptionType == typeof(KeyNotFoundException))
+            {
+                status = HttpStatusCode.Unauthorized;
+                message = exception.Message;
+                //stackTrace = exception.StackTrace;
+                stackTrace = string.Empty;
+            }
+            else
+            {
+                status = HttpStatusCode.InternalServerError;
+                message = exception.Message;
+                //stackTrace = exception.StackTrace;
+                stackTrace = string.Empty;
+            }
+
+            var exceptionResult = JsonSerializer.Serialize(new { error = message, stackTrace });
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)status;
+
+            return context.Response.WriteAsync(exceptionResult);
+        }
+
+    }
+}

@@ -34,17 +34,18 @@ namespace Web.API.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             //// FROM DB
-            //var item = await _repo.Get<Product>(id);
-            //return item;
+            var item = await _repo.Get<Product>(id);
 
             // FROM CACHE
-            var item = _cache.Get<Product>(id.ToString());
-            if(item != null)
-            {
-                return Ok(item);
-            }
+            //var item = _cache.Get<Product>(id.ToString());
+            //if(item != null)
+            //{
+            //    return Ok(item);
+            //}
 
-            return NotFound();
+            var customError = item.Price;
+
+            return NoContent();
         }
 
         [HttpPut]

@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Cache\Cache.csproj" />
     <ProjectReference Include="..\GenericRepository\GenericRepository.csproj" />
+    <ProjectReference Include="..\GlobalExceptionHandler\GlobalExceptionHandler.csproj" />
   </ItemGroup>
 
 </Project>
