@@ -5,7 +5,7 @@
 namespace Web.API.Migrations
 {
     /// <inheritdoc />
-    public partial class Db_Create : Migration
+    public partial class Create_DB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

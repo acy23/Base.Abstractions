@@ -11,8 +11,8 @@ using Web.API;
 namespace Web.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231106135255_Db_Create")]
-    partial class Db_Create
+    [Migration("20231113104358_Create_DB")]
+    partial class Create_DB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

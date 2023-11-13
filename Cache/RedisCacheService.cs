@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,22 @@ namespace Cache
     public class RedisCacheService : ICacheService
     {
         private readonly ConnectionMultiplexer _redisConnection;
+        private readonly RedisCacheOptions _redisCacheOptions;
+        private readonly ICacheService _inMemoryCacheService;
+        private readonly IMemoryCache _memoryCache;
 
-        public RedisCacheService()
+        public RedisCacheService(RedisCacheOptions redisCacheOptions, IMemoryCache memoryCache)
         {
-            string redisConnectionString = "your_redis_connection_string";
-            _redisConnection = ConnectionMultiplexer.Connect(redisConnectionString);
+            _redisCacheOptions = redisCacheOptions;
+            _memoryCache = memoryCache;
+
+            string redisConnectionString = _redisCacheOptions.RedisConnKey;
+            if (!string.IsNullOrWhiteSpace(redisConnectionString))
+            {
+                _redisConnection = ConnectionMultiplexer.Connect(redisConnectionString);
+            }
+
+            _inMemoryCacheService = new InMemoryCacheService(_memoryCache);
         }
 
         public void Set<TItem>(string key, object value) where TItem : class
@@ -23,16 +35,28 @@ namespace Cache
             var db = _redisConnection.GetDatabase();
             var serializedValue = JsonConvert.SerializeObject(value);
             db.StringSet(key, serializedValue);
+
+            _inMemoryCacheService.Set<TItem>(key, value);
         }
 
         public object Get<TEntity>(string key) where TEntity : class
         {
+            var inMemoryValue = _inMemoryCacheService.Get<TEntity>(key);
+            if (inMemoryValue != null)
+            {
+                return inMemoryValue;
+            }
+
             var db = _redisConnection.GetDatabase();
             var cachedValue = db.StringGet(key);
             if (cachedValue.HasValue)
             {
-                return JsonConvert.DeserializeObject<TEntity>(cachedValue);
+                var deserializedValue = JsonConvert.DeserializeObject<TEntity>(cachedValue);
+
+                _inMemoryCacheService.Set<TEntity>(key, deserializedValue);
+                return deserializedValue;
             }
+
             return null;
         }
 
@@ -40,6 +64,8 @@ namespace Cache
         {
             var db = _redisConnection.GetDatabase();
             db.KeyDelete(key);
+
+            _inMemoryCacheService.Remove<TEntity>(key);
         }
     }
 }

@@ -11,11 +11,22 @@ namespace Cache
 {
     public static class Bootstrapper
     {
-        public static IServiceCollection AddCache(this IServiceCollection services)
+        public static IServiceCollection AddCache(this IServiceCollection services, RedisCacheOptions options)
         {
             services.AddMemoryCache();
-            services.TryAddSingleton<ICacheService, InMemoryCacheService>();
-            services.TryAddSingleton<ICacheService, RedisCacheService>();
+            services.AddSingleton<InMemoryCacheService>();
+
+            bool useRedisCache = options.IsRedis;
+
+            if (useRedisCache)
+            {
+                services.AddSingleton(options);
+                services.AddSingleton<ICacheService, RedisCacheService>();
+            }
+            else
+            {
+                services.AddSingleton<ICacheService, InMemoryCacheService>();
+            }
 
             return services;
         }

@@ -20,8 +20,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var appDbContext = new AppDbContext(options: new DbContextOptions<AppDbContext>());
 builder.Services.AddGenericRepository();
-builder.Services.AddCache();
-
+builder.Services.AddCache(new RedisCacheOptions("localhost:6379", true));
+    
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
