@@ -9,12 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.API", "Web.API\Web.API.
 	ProjectSection(ProjectDependencies) = postProject
 		{39CA7660-BBD3-4CB5-A2C0-49A50C7D6837} = {39CA7660-BBD3-4CB5-A2C0-49A50C7D6837}
 		{87143049-C468-4CC7-A26A-BCCB5D1BE449} = {87143049-C468-4CC7-A26A-BCCB5D1BE449}
+		{AE98A3B1-616A-4501-A4DF-50A4A1DEAB08} = {AE98A3B1-616A-4501-A4DF-50A4A1DEAB08}
 		{E53D0A70-8673-455A-AAB3-4FC686C6FC68} = {E53D0A70-8673-455A-AAB3-4FC686C6FC68}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cache", "Cache\Cache.csproj", "{E53D0A70-8673-455A-AAB3-4FC686C6FC68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalExceptionHandler", "GlobalExceptionHandler\GlobalExceptionHandler.csproj", "{87143049-C468-4CC7-A26A-BCCB5D1BE449}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GlobalExceptionHandler", "GlobalExceptionHandler\GlobalExceptionHandler.csproj", "{87143049-C468-4CC7-A26A-BCCB5D1BE449}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Response", "Response\Response.csproj", "{AE98A3B1-616A-4501-A4DF-50A4A1DEAB08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +41,10 @@ Global
 		{87143049-C468-4CC7-A26A-BCCB5D1BE449}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87143049-C468-4CC7-A26A-BCCB5D1BE449}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87143049-C468-4CC7-A26A-BCCB5D1BE449}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE98A3B1-616A-4501-A4DF-50A4A1DEAB08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE98A3B1-616A-4501-A4DF-50A4A1DEAB08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE98A3B1-616A-4501-A4DF-50A4A1DEAB08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE98A3B1-616A-4501-A4DF-50A4A1DEAB08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

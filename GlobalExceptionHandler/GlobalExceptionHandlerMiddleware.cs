@@ -41,7 +41,6 @@ namespace GlobalExceptionHandler
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             HttpStatusCode status;
-            var stackTrace = string.Empty;
             string message;
 
             var exceptionType = exception.GetType();
@@ -50,46 +49,34 @@ namespace GlobalExceptionHandler
             {
                 message = exception.Message;
                 status = HttpStatusCode.BadRequest;
-                //stackTrace = exception.StackTrace;
-                stackTrace = string.Empty;
             }
             else if (exceptionType == typeof(NotFoundException))
             {
                 message = exception.Message;
                 status = HttpStatusCode.NotFound;
-                //stackTrace = exception.StackTrace;
-                stackTrace = string.Empty;
             }
             else if (exceptionType == typeof(NotImplementedException))
             {
                 status = HttpStatusCode.NotImplemented;
                 message = exception.Message;
-                //stackTrace = exception.StackTrace;
-                stackTrace = string.Empty;
             }
             else if (exceptionType == typeof(UnauthorizedAccessException))
             {
                 status = HttpStatusCode.Unauthorized;
                 message = exception.Message;
-                //stackTrace = exception.StackTrace;
-                stackTrace = string.Empty;
             }
             else if (exceptionType == typeof(KeyNotFoundException))
             {
                 status = HttpStatusCode.Unauthorized;
                 message = exception.Message;
-                //stackTrace = exception.StackTrace;
-                stackTrace = string.Empty;
             }
             else
             {
                 status = HttpStatusCode.InternalServerError;
                 message = exception.Message;
-                //stackTrace = exception.StackTrace;
-                stackTrace = string.Empty;
             }
 
-            var exceptionResult = JsonSerializer.Serialize(new { error = message, stackTrace });
+            var exceptionResult = JsonSerializer.Serialize(new { error = message });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)status;
 

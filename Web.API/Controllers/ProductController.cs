@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Response;
 
 namespace Web.API.Controllers
 {
@@ -14,12 +15,14 @@ namespace Web.API.Controllers
         private readonly AppDbContext _context;
         private readonly IRepository _repo;
         private readonly ICacheService _cache;
+        private readonly IProductService _productService;
 
-        public ProductController(AppDbContext context, ICacheService cache)
+        public ProductController(AppDbContext context, ICacheService cache, IProductService productService)
         {
             _context = context;
             _repo = new Repository(_context);
             _cache = cache;
+            _productService = productService;
         }
 
         [HttpPost]
@@ -34,7 +37,7 @@ namespace Web.API.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             //// FROM DB
-            var item = await _repo.Get<Product>(id);
+            //var item = await _repo.Get<Product>(id);
 
             // FROM CACHE
             //var item = _cache.Get<Product>(id.ToString());
@@ -43,9 +46,10 @@ namespace Web.API.Controllers
             //    return Ok(item);
             //}
 
-            var customError = item.Price;
+            var result = await _productService.GetById(id);
+            return result.ToApiResult();
 
-            return NoContent();
+            //if(result.)
         }
 
         [HttpPut]

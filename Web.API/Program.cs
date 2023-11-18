@@ -25,7 +25,9 @@ var appDbContext = new AppDbContext(options: new DbContextOptions<AppDbContext>(
 builder.Services.AddGenericRepository();
 
 // To use cache library
-builder.Services.AddCache(new RedisCacheOptions("localhost:6379", true));
+builder.Services.AddCache(new RedisCacheOptions("localhost:6379", false));
+
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 
