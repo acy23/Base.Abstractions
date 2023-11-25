@@ -7,7 +7,7 @@
     <Description>Easy to use 3rd party source middleware</Description>
     <Authors>acy23</Authors>
     <Version>1.0.0</Version>
-    <PackageId>Base.Abstractions</PackageId>
+    <PackageId>Base.Abstractions.GenericRepository</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
