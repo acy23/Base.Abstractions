@@ -12,12 +12,14 @@ namespace Response
         public bool HasValue { get; }
         public T Value { get; }
         public int StatusCode { get; }
+        public bool IsSuccessStatusCode { get; }
         public string Message { get; set; }
 
         public ServiceResponse(T value)
         {
             Value = value;
             HasValue = true;
+            IsSuccessStatusCode = true;
             StatusCode = 200;
             Message = "Success";
         }
@@ -28,6 +30,7 @@ namespace Response
             HasValue = false;
             StatusCode = statusCode;
             Message = message;
+            IsSuccessStatusCode = statusCode == 204 ? true : false;
         }
 
         public static ServiceResponse<T> Forbidden(string message)
@@ -45,7 +48,7 @@ namespace Response
             return new ServiceResponse<T>(data);
         }
 
-        public new ServiceResponse<T> NoContent()
+        public static ServiceResponse<T> NoContent()
         {
             return new ServiceResponse<T>(204, "No content");
         }
